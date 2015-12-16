@@ -7,10 +7,15 @@
       <Diagram DiagramId="7b8855ab635b4e24866a2a6a1cdaa7fe" Name="Diagram1">
         <EntityTypeShape EntityType="HikkaTubeModel.Board" Width="1.5" PointX="2.5" PointY="3.5" IsExpanded="true" />
         <EntityTypeShape EntityType="HikkaTubeModel.Comment" Width="1.5" PointX="4.875" PointY="0.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="HikkaTubeModel.User" Width="1.5" PointX="5" PointY="3.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="HikkaTubeModel.Video" Width="1.5" PointX="2.25" PointY="0.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="HikkaTubeModel.User" Width="1.5" PointX="4.875" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="HikkaTubeModel.Video" Width="1.5" PointX="2" PointY="0.5" IsExpanded="true" />
         <AssociationConnector Association="HikkaTubeModel.FK_Comment_User" ManuallyRouted="false" />
         <AssociationConnector Association="HikkaTubeModel.FK_Comment_Video" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="HikkaTubeModel.Thread" Width="1.5" PointX="8.125" PointY="1.5" />
+        <AssociationConnector Association="HikkaTubeModel.FK_Thread_Board" />
+        <AssociationConnector Association="HikkaTubeModel.FK_Comment_Thread" />
+        <AssociationConnector Association="HikkaTubeModel.FK_Thread_User" />
+        <AssociationConnector Association="HikkaTubeModel.FK_Thread_Video" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

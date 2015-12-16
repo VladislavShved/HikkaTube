@@ -1,0 +1,35 @@
+﻿@using DataSource
+@model DataSource.Board
+
+@{
+    ViewBag.Title = @Model.ShortName + " Board";
+    Layout = "~/Views/_Layout.cshtml";
+}
+
+<h2>@Model.ShortName Board</h2>
+
+@foreach (var thread in ViewBag.Threads)
+{
+    var currentThread = thread as Thread;
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-1">
+                <div class="jumbotron">
+                    <h1>@currentThread.Title</h1>
+                    <div align="center" class="embed-responsive embed-responsive-16by9">
+                        <video width="400" class="embed-responsive-item" controls>
+                            <source src="~/Content/videos/small.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <br/>
+                    <p class="lead">@currentThread.Description</p>
+                    <div>
+                        <a class="btn btn-lg btn-info" href="#" role="button">В тред</a>
+                    </div>
+                </div>
+                <hr />
+            </div>
+        </div>
+    </div>
+}
+

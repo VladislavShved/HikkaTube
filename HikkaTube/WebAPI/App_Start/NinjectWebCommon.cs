@@ -67,6 +67,7 @@ namespace WebAPI
       kernel.Bind<IRepository<Board>>().To<BoardRepository>().InRequestScope();
       kernel.Bind<IRepository<Comment>>().To<CommentRepository>().InRequestScope();
       kernel.Bind<IRepository<Video>>().To<VideoRepository>().InRequestScope();
+      kernel.Bind<IRepository<Thread>>().To<ThreadRepository>().InRequestScope();
     }
   }
 }

@@ -13,6 +13,7 @@ using DataSource;
 using DependencyResolver;
 using DependencyResolver.DependencyResolvers;
 using Ninject;
+using User = Core.Authentication.Models.User;
 
 namespace WebAPI
 {

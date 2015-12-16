@@ -16,7 +16,8 @@
         <h3>Разделы: </h3>
         @foreach (var board in ViewBag.Boards)
         {
-            <a href=""><span style="font-size: 20px">@board.ShortName</span></a>
+            var link = "/Board/Index" + board.ShortName;
+            <a href="@link" title="@board.Description"><span style="font-size: 20px">@board.ShortName</span></a>
             <span>&nbsp;</span>
         }
     </div>
@@ -29,8 +30,8 @@
     <hr>
     <footer>
         <p>© Hikka Dev Team 2015</p>
-        <p>Shved Vladislav - Project manager, front-end developer</p>
-        <p>Alex Borovik - back-end developer</p>
-        <p>Sergey Nesterenko - back-end developer</p>
+        <p>Shved Vladislav - Project manager, front/back-end developer</p>
+        <p>Alex Borovik - front-end developer</p>
+        <p>Sergey Nesterenko - database developer</p>
     </footer>
 </div>

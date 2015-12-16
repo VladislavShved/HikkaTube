@@ -1,36 +1,46 @@
 ﻿function AuthModel() {
+    var self = this;
+    self.login = ko.observable();
+    self.password = ko.observable();
+    self.isRemember = ko.observable();
+    self.isAuthenticated = ko.observable();
+    var isAuth = false;
 
+    $.ajax({
+        url: '/api/Authentication/IsAuthenticated',
+        type: 'GET',
+        contentType: "text/json",
+        dataType: "json",
+        success: function(data) {
+            isAuth = data;
+            self.isAuthenticated(isAuth);
+        }
+    });
 
-    this.login = ko.observable();
-    this.password = ko.observable();
-    this.isRemember = ko.observable();
-
-    this.authenticate = function () {
+    self.authenticate = function () {
         $.ajax(
             {
-                url: 'api/Authentication/Authenticate',
+                url: '/api/Authentication/Authenticate',
                 type: 'POST',
                 data: {
-                    Login: this.login(),
-                    Password: this.password(),
-                    IsRemember: this.isRemember()
+                    Login: self.login(),
+                    Password: self.password(),
+                    IsRemember: self.isRemember()
                 },
                 success: function(data) {
                     $('#signIn').modal('hide');
-                    $("#loginForm").load(location.href + " #loginForm");
-                    $("#logoutButton").click();
+                    self.isAuthenticated(true);
                 }
             });
     };
 
-    this.logOut = function () {
+    self.logOut = function () {
         $.ajax(
            {
-               url: 'api/Authentication/SignOut',
+               url: '/api/Authentication/SignOut',
                type: 'DELETE',
                success: function (data) {
-                   $("#loginForm").load(location.href + " #loginForm");
-                   $("#logoutButton").click();
+                   self.isAuthenticated(false);
                }
            });
     }
