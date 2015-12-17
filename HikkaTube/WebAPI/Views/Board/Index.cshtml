@@ -21,10 +21,13 @@
                             <source src="~/Content/videos/small.mp4" type="video/mp4">
                         </video>
                     </div>
-                    <br/>
+                    <br />
                     <p class="lead">@currentThread.Description</p>
                     <div>
-                        <a class="btn btn-lg btn-info" href="#" role="button">В тред</a>
+                        @{
+                             var reference = "/Thread/Index/" + currentThread.Id;
+                             <a class="btn btn-lg btn-info" href="@reference" role="button">В тред</a>
+                        }
                     </div>
                 </div>
                 <hr />

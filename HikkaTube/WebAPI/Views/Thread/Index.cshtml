@@ -1,0 +1,39 @@
+﻿@model DataSource.Thread
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-10">
+            <div class="jumbotron">
+                <h1>@Model.Title</h1>
+                <div align="center" class="embed-responsive embed-responsive-16by9">
+                    <video width="400" class="embed-responsive-item" controls>
+                        <source src="~/Content/videos/small.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <br />
+                <p class="lead">@Model.Description</p>
+                @{
+                    var i = 1;
+
+                    foreach (var comment in Model.Comments)
+                    {
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h3>Comment #@i</h3>
+                                <div class="well">
+                                    @comment.Text
+                                </div>
+                            </div>
+                        </div>
+                        i++;
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
