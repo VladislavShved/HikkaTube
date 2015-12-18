@@ -15,10 +15,10 @@
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="~/Scripts/knockout-3.4.0.js"></script>
     <script src="~/Scripts/knockout-3.4.0.debug.js"></script>
-    <script src="~/App_Scripts/Authentication/Authentication.js" defer="defer"></script>
     <title>Hikka Tube</title>
 </head>
 <body>
+<div id="auth-data">
     <div class="modal fade" id="signIn" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -29,11 +29,11 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="login" class="control-label">Login</label>
-                            <input type="text" class="form-control" data-bind="value: login" id="login" />
+                            <input type="text" class="form-control" data-bind="value: login" id="login"/>
                         </div>
                         <div class="form-group">
                             <label for="password" class="control-label">Password</label>
-                            <input type="password" class="form-control" data-bind="value: password" id="password" />
+                            <input type="password" class="form-control" data-bind="value: password" id="password"/>
                         </div>
                         <div class="checkbox">
                             <label><input type="checkbox" data-bind="value: isRemember">Remember me</label>
@@ -93,6 +93,8 @@
             </div>
         </div>
     </div>
+</div>
+    @Scripts.Render("~/App_Scripts/Authentication/Authentication.js");
     @RenderBody();
 </body>
 </html>

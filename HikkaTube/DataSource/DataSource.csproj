@@ -107,6 +107,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="HikkaTubeDb.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>HikkaTubeDb.edmx</DependentUpon>
@@ -117,9 +120,6 @@
       <DependentUpon>HikkaTubeDb.edmx</DependentUpon>
       <LastGenOutput>HikkaTubeDb.cs</LastGenOutput>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
