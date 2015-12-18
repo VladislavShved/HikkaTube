@@ -1,0 +1,55 @@
+﻿@model DataSource.Thread
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/_Layout.cshtml";
+}
+
+<div id="thread-data" class="container">
+    <div class="row">
+        <div class="col-md-10">
+            <div class="jumbotron">
+                <h1>@Model.Title</h1>
+                <div align="center" class="embed-responsive embed-responsive-16by9">
+                    <video width="400" class="embed-responsive-item" controls>
+                        <source src="~/Content/videos/small.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <br/>
+                <p class="lead">@Model.Description</p>
+                <hr/>
+                <p><button data-bind="click: showField" type="button" class="btn btn-success">Добавить комментарий</button>
+                </p>
+                <div data-bind="visible: isVisible">
+                    <form role="form" data-bind="submit: sendComment">
+                        <div class="form-group">
+                            <label for="comment">Комментарий:</label>
+                            <textarea data-bind="value: commentText" style="-moz-resize: none; -ms-resize: none; -o-resize: none; resize: none" class="form-control" rows="5" id="comment"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-info">Отправить</button>
+                        </div>
+                    </form>
+                </div>
+                @{
+                    var i = 1;
+
+                    foreach (var comment in Model.Comments)
+                    {
+                        <hr/>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h3>#@i</h3>
+                                <div class="well">
+                                    @comment.Text
+                                </div>
+                            </div>
+                        </div>
+                        i++;
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/App_Scripts/Thread/Thread.js");

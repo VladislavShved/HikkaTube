@@ -4,14 +4,14 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="HikkaTubeModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="HikkaTubeModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Board">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
           <Property Name="ShortName" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="Comment">
           <Key>
@@ -19,8 +19,6 @@
           </Key>
           <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Text" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="UserId" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="VideoId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="ThreadId" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
         <EntityType Name="Thread">
@@ -40,16 +38,16 @@
           </Key>
           <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Login" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="PasswordHash" Type="binary" MaxLength="16" Nullable="false" />
+          <Property Name="PasswordHash" Type="binary" MaxLength="256" Nullable="false" />
         </EntityType>
         <EntityType Name="Video">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="Path" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="250" Nullable="false" />
           <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="Path" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
         <Association Name="FK_Comment_Thread">
           <End Role="Thread" Type="Self.Thread" Multiplicity="1" />
@@ -60,30 +58,6 @@
             </Principal>
             <Dependent Role="Comment">
               <PropertyRef Name="ThreadId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Comment_User">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
-          <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Comment">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Comment_Video">
-          <End Role="Video" Type="Self.Video" Multiplicity="1" />
-          <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Video">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Comment">
-              <PropertyRef Name="VideoId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -133,14 +107,6 @@
             <End Role="Thread" EntitySet="Thread" />
             <End Role="Comment" EntitySet="Comment" />
           </AssociationSet>
-          <AssociationSet Name="FK_Comment_User" Association="Self.FK_Comment_User">
-            <End Role="User" EntitySet="User" />
-            <End Role="Comment" EntitySet="Comment" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Comment_Video" Association="Self.FK_Comment_Video">
-            <End Role="Video" EntitySet="Video" />
-            <End Role="Comment" EntitySet="Comment" />
-          </AssociationSet>
           <AssociationSet Name="FK_Thread_Board" Association="Self.FK_Thread_Board">
             <End Role="Board" EntitySet="Board" />
             <End Role="Thread" EntitySet="Thread" />
@@ -154,7 +120,8 @@
             <End Role="Thread" EntitySet="Thread" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="HikkaTubeModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -164,8 +131,8 @@
           </Key>
           <Property Name="Id" Type="Guid" Nullable="false" />
           <Property Name="ShortName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Threads" Relationship="HikkaTubeModel.FK_Thread_Board" FromRole="Board" ToRole="Thread" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Threads" Relationship="Self.FK_Thread_Board" FromRole="Board" ToRole="Thread" />
         </EntityType>
         <EntityType Name="Comment">
           <Key>
@@ -173,12 +140,23 @@
           </Key>
           <Property Name="Id" Type="Guid" Nullable="false" />
           <Property Name="Text" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ThreadId" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="Thread" Relationship="Self.FK_Comment_Thread" FromRole="Comment" ToRole="Thread" />
+        </EntityType>
+        <EntityType Name="Thread">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="Title" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BoardId" Type="Guid" Nullable="false" />
           <Property Name="UserId" Type="Guid" Nullable="false" />
           <Property Name="VideoId" Type="Guid" Nullable="false" />
-          <NavigationProperty Name="User" Relationship="Self.FK_Comment_User" FromRole="Comment" ToRole="User" />
-          <NavigationProperty Name="Video" Relationship="Self.FK_Comment_Video" FromRole="Comment" ToRole="Video" />
-          <Property Name="ThreadId" Type="Guid" Nullable="false" />
-          <NavigationProperty Name="Thread" Relationship="HikkaTubeModel.FK_Comment_Thread" FromRole="Comment" ToRole="Thread" />
+          <NavigationProperty Name="Board" Relationship="Self.FK_Thread_Board" FromRole="Thread" ToRole="Board" />
+          <NavigationProperty Name="Comments" Relationship="Self.FK_Comment_Thread" FromRole="Thread" ToRole="Comment" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Thread_User" FromRole="Thread" ToRole="User" />
+          <NavigationProperty Name="Video" Relationship="Self.FK_Thread_Video" FromRole="Thread" ToRole="Video" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -186,94 +164,22 @@
           </Key>
           <Property Name="Id" Type="Guid" Nullable="false" />
           <Property Name="Login" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="PasswordHash" Type="Binary" MaxLength="16" FixedLength="true" Nullable="false" />
-          <NavigationProperty Name="Comments" Relationship="Self.FK_Comment_User" FromRole="User" ToRole="Comment" />
-          <NavigationProperty Name="Threads" Relationship="HikkaTubeModel.FK_Thread_User" FromRole="User" ToRole="Thread" />
+          <Property Name="PasswordHash" Type="Binary" MaxLength="256" FixedLength="true" Nullable="false" />
+          <NavigationProperty Name="Threads" Relationship="Self.FK_Thread_User" FromRole="User" ToRole="Thread" />
         </EntityType>
         <EntityType Name="Video">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Guid" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Path" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Comments" Relationship="Self.FK_Comment_Video" FromRole="Video" ToRole="Comment" />
-          <NavigationProperty Name="Threads" Relationship="HikkaTubeModel.FK_Thread_Video" FromRole="Video" ToRole="Thread" />
-        </EntityType>
-        <Association Name="FK_Comment_User">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
-          <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Comment">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Comment_Video">
-          <End Role="Video" Type="Self.Video" Multiplicity="1" />
-          <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Video">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Comment">
-              <PropertyRef Name="VideoId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityContainer Name="HikkaTubeEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Boards" EntityType="Self.Board" />
-          <EntitySet Name="Comments" EntityType="Self.Comment" />
-          <EntitySet Name="Users" EntityType="Self.User" />
-          <EntitySet Name="Videos" EntityType="Self.Video" />
-          <AssociationSet Name="FK_Comment_User" Association="Self.FK_Comment_User">
-            <End Role="User" EntitySet="Users" />
-            <End Role="Comment" EntitySet="Comments" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Comment_Video" Association="Self.FK_Comment_Video">
-            <End Role="Video" EntitySet="Videos" />
-            <End Role="Comment" EntitySet="Comments" />
-          </AssociationSet>
-          <EntitySet Name="Threads" EntityType="HikkaTubeModel.Thread" />
-          <AssociationSet Name="FK_Thread_Board" Association="HikkaTubeModel.FK_Thread_Board">
-            <End Role="Board" EntitySet="Boards" />
-            <End Role="Thread" EntitySet="Threads" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Comment_Thread" Association="HikkaTubeModel.FK_Comment_Thread">
-            <End Role="Thread" EntitySet="Threads" />
-            <End Role="Comment" EntitySet="Comments" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Thread_User" Association="HikkaTubeModel.FK_Thread_User">
-            <End Role="User" EntitySet="Users" />
-            <End Role="Thread" EntitySet="Threads" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Thread_Video" Association="HikkaTubeModel.FK_Thread_Video">
-            <End Role="Video" EntitySet="Videos" />
-            <End Role="Thread" EntitySet="Threads" />
-          </AssociationSet>
-        </EntityContainer>
-        <EntityType Name="Thread">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Guid" Nullable="false" />
-          <Property Name="Title" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="BoardId" Type="Guid" Nullable="false" />
-          <Property Name="UserId" Type="Guid" Nullable="false" />
-          <Property Name="VideoId" Type="Guid" Nullable="false" />
-          <NavigationProperty Name="Board" Relationship="HikkaTubeModel.FK_Thread_Board" FromRole="Thread" ToRole="Board" />
-          <NavigationProperty Name="Comments" Relationship="HikkaTubeModel.FK_Comment_Thread" FromRole="Thread" ToRole="Comment" />
-          <NavigationProperty Name="User" Relationship="HikkaTubeModel.FK_Thread_User" FromRole="Thread" ToRole="User" />
-          <NavigationProperty Name="Video" Relationship="HikkaTubeModel.FK_Thread_Video" FromRole="Thread" ToRole="Video" />
+          <NavigationProperty Name="Threads" Relationship="Self.FK_Thread_Video" FromRole="Video" ToRole="Thread" />
         </EntityType>
         <Association Name="FK_Thread_Board">
-          <End Type="HikkaTubeModel.Board" Role="Board" Multiplicity="1" />
-          <End Type="HikkaTubeModel.Thread" Role="Thread" Multiplicity="*" />
+          <End Role="Board" Type="Self.Board" Multiplicity="1" />
+          <End Role="Thread" Type="Self.Thread" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Board">
               <PropertyRef Name="Id" />
@@ -284,8 +190,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Comment_Thread">
-          <End Type="HikkaTubeModel.Thread" Role="Thread" Multiplicity="1" />
-          <End Type="HikkaTubeModel.Comment" Role="Comment" Multiplicity="*" />
+          <End Role="Thread" Type="Self.Thread" Multiplicity="1" />
+          <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Thread">
               <PropertyRef Name="Id" />
@@ -296,8 +202,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Thread_User">
-          <End Type="HikkaTubeModel.User" Role="User" Multiplicity="1" />
-          <End Type="HikkaTubeModel.Thread" Role="Thread" Multiplicity="*" />
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Thread" Type="Self.Thread" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
               <PropertyRef Name="Id" />
@@ -308,8 +214,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Thread_Video">
-          <End Type="HikkaTubeModel.Video" Role="Video" Multiplicity="1" />
-          <End Type="HikkaTubeModel.Thread" Role="Thread" Multiplicity="*" />
+          <End Role="Video" Type="Self.Video" Multiplicity="1" />
+          <End Role="Thread" Type="Self.Thread" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Video">
               <PropertyRef Name="Id" />
@@ -319,6 +225,29 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityContainer Name="HikkaTubeEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Boards" EntityType="Self.Board" />
+          <EntitySet Name="Comments" EntityType="Self.Comment" />
+          <EntitySet Name="Threads" EntityType="Self.Thread" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <EntitySet Name="Videos" EntityType="Self.Video" />
+          <AssociationSet Name="FK_Thread_Board" Association="Self.FK_Thread_Board">
+            <End Role="Board" EntitySet="Boards" />
+            <End Role="Thread" EntitySet="Threads" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comment_Thread" Association="Self.FK_Comment_Thread">
+            <End Role="Thread" EntitySet="Threads" />
+            <End Role="Comment" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Thread_User" Association="Self.FK_Thread_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Thread" EntitySet="Threads" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Thread_Video" Association="Self.FK_Thread_Video">
+            <End Role="Video" EntitySet="Videos" />
+            <End Role="Thread" EntitySet="Threads" />
+          </AssociationSet>
+        </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -337,9 +266,19 @@
           <EntitySetMapping Name="Comments">
             <EntityTypeMapping TypeName="HikkaTubeModel.Comment">
               <MappingFragment StoreEntitySet="Comment">
-                <ScalarProperty Name="ThreadId" ColumnName="ThreadId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Text" ColumnName="Text" />
+                <ScalarProperty Name="ThreadId" ColumnName="ThreadId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Threads">
+            <EntityTypeMapping TypeName="HikkaTubeModel.Thread">
+              <MappingFragment StoreEntitySet="Thread">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="BoardId" ColumnName="BoardId" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="VideoId" ColumnName="VideoId" />
               </MappingFragment>
@@ -361,18 +300,6 @@
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Path" ColumnName="Path" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Threads">
-            <EntityTypeMapping TypeName="HikkaTubeModel.Thread">
-              <MappingFragment StoreEntitySet="Thread">
-                <ScalarProperty Name="VideoId" ColumnName="VideoId" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="BoardId" ColumnName="BoardId" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

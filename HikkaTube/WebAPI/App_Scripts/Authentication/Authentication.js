@@ -47,4 +47,6 @@
 }
 
 var authModel = new AuthModel();
-ko.applyBindings(authModel);
+var elem = document.getElementById("auth-data");
+ko.cleanNode(elem);
+ko.applyBindings(authModel, elem);
