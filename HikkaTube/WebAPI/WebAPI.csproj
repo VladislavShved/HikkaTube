@@ -183,6 +183,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\icons\14192168579680.png" />
     <Content Include="Content\icons\ruby-icon-1005094329.png" />
+    <Content Include="Content\videos\small.mp4" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
